@@ -18,7 +18,7 @@ export const CreateDailyLog = () => {
         hourlyRate,
       };
 
-      const response = await fetch('/api/dailylogs', {
+      const response = await fetch('/api/daily-logs', {
         method: 'POST',
         body: JSON.stringify(data),
       });
