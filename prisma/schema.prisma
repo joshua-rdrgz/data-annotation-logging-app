@@ -1,0 +1,19 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model DailyLog {
+  id             String  @id @default(cuid())
+  date           String
+  name           String
+  tasksCompleted Int
+  minutesWorked  Int
+  hourlyRate     Int
+  paidOut        Boolean @default(false)
+}
