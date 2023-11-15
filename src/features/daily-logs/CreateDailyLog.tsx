@@ -1,64 +1,73 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { dailyLogSchema, type DailyLogSchema } from '@/schemas/dailyLogSchema';
+import { dailyLogService } from '@/services/dailyLogService';
+import { DailyLogItem } from '@/features/daily-logs/DailyLogItem';
+import { Form } from '@/ui/form';
+import { Input } from '@/ui/input';
+import { Button } from '@/ui/button';
+
+const INPUTS = [
+  {
+    name: 'name' as const,
+    label: 'Task Name',
+  },
+  {
+    name: 'tasksCompleted' as const,
+    label: 'Tasks Completed',
+    inputProps: {
+      type: 'number',
+    },
+  },
+  {
+    name: 'minutesWorked' as const,
+    label: 'Minutes Worked',
+    inputProps: {
+      type: 'number',
+    },
+  },
+  {
+    name: 'hourlyRate' as const,
+    label: 'Hourly Rate',
+    inputProps: {
+      type: 'number',
+    },
+  },
+];
 
 export const CreateDailyLog = () => {
-  const [name, setName] = useState<string | undefined>();
-  const [tasksCompleted, setTasksCompleted] = useState<number | undefined>();
-  const [minutesWorked, setMinutesWorked] = useState<number | undefined>();
-  const [hourlyRate, setHourlyRate] = useState<number | undefined>();
+  const formMethods = useForm<DailyLogSchema>({
+    resolver: zodResolver(dailyLogSchema),
+    defaultValues: {
+      name: '',
+      tasksCompleted: 0,
+      minutesWorked: 0,
+      hourlyRate: 0,
+    },
+  });
 
-  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const createDailyLog = async () => {
-      const data = {
-        date: new Date().toISOString(),
-        name,
-        tasksCompleted,
-        minutesWorked,
-        hourlyRate,
-      };
-
-      const response = await fetch('/api/daily-logs', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-      return await response.json();
-    };
-
-    createDailyLog();
-  };
+  const onSubmit = formMethods.handleSubmit((values) =>
+    dailyLogService(values)
+  );
 
   return (
-    <form onSubmit={onFormSubmit}>
-      <label htmlFor='name'>Name</label>
-      <input
-        id='name'
-        type='text'
-        value={name || ''}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <label htmlFor='tasksCompleted'>Tasks Completed</label>
-      <input
-        id='tasksCompleted'
-        type='number'
-        value={tasksCompleted || ''}
-        onChange={(e) => setTasksCompleted(+e.target.value)}
-      />
-      <label htmlFor='minutesWorked'>Minutes Worked</label>
-      <input
-        id='minutesWorked'
-        type='number'
-        value={minutesWorked || ''}
-        onChange={(e) => setMinutesWorked(+e.target.value)}
-      />
-      <label htmlFor='hourlyRate'>Hourly Rate</label>
-      <input
-        id='hourlyRate'
-        type='number'
-        value={hourlyRate || ''}
-        onChange={(e) => setHourlyRate(+e.target.value)}
-      />
-      <input type='submit' />
-    </form>
+    <Form formMethods={formMethods} onSubmit={onSubmit} className='space-y-3'>
+      {INPUTS.map((input) => (
+        <Form.Field
+          key={input.name}
+          name={input.name}
+          render={({ field: { onChange, value } }) => (
+            <DailyLogItem
+              onChange={onChange}
+              value={value}
+              label={input.label}
+            />
+          )}
+        />
+      ))}
+      <Button asChild>
+        <Input type='submit' />
+      </Button>
+    </Form>
   );
 };
