@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/context/theme-provider';
+import { QueryClientInstanceProvider } from '@/context/query-provider';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -6,13 +7,15 @@ interface AppProvidersProps {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <ThemeProvider
-      attribute='class'
-      defaultTheme='system'
-      enableSystem
-      disableTransitionOnChange
-    >
-      {children}
-    </ThemeProvider>
+    <QueryClientInstanceProvider>
+      <ThemeProvider
+        attribute='class'
+        defaultTheme='system'
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+      </ThemeProvider>
+    </QueryClientInstanceProvider>
   );
 }
