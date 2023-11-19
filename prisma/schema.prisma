@@ -16,4 +16,5 @@ model Log {
   minutesWorked  Int
   hourlyRate     Int
   paidOut        Boolean @default(false)
+  readyToPayOut  Boolean @default(false)
 }
