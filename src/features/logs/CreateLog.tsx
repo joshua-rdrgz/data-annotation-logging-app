@@ -58,7 +58,7 @@ export const CreateLog = () => {
       toast.success('Log successfully created', {
         icon: '🎉',
       });
-      queryClient.refetchQueries({ queryKey: [QueryKeys.LOGS] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LOGS] });
       formMethods.reset();
     },
     onError(error) {
