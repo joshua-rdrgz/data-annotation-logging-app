@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClientInstance } from '@/context/query-provider';
 import { dailyLogSchema, type DailyLogSchema } from '@/schemas/dailyLogSchema';
-import { dailyLogService } from '@/services/dailyLogService';
+import { dailyLogClientService } from '@/services/client/dailyLog';
 import { DailyLogItem } from '@/features/daily-logs/DailyLogItem';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
@@ -46,9 +48,17 @@ export const CreateDailyLog = () => {
     },
   });
 
-  const onSubmit = formMethods.handleSubmit((values) =>
-    dailyLogService(values)
-  );
+  const { queryClient } = useQueryClientInstance();
+
+  const { mutate: createDailyLog, isPending } = useMutation({
+    mutationFn: dailyLogClientService.createDailyLog,
+    onSuccess(data) {
+      queryClient.refetchQueries({ queryKey: ['daily-logs'] });
+      formMethods.reset();
+    },
+  });
+
+  const onSubmit = formMethods.handleSubmit((values) => createDailyLog(values));
 
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit} className='space-y-3'>
@@ -56,6 +66,7 @@ export const CreateDailyLog = () => {
         <Form.Field
           key={input.name}
           name={input.name}
+          disabled={isPending}
           render={({ field: { onChange, value } }) => (
             <DailyLogItem
               onChange={onChange}
@@ -66,7 +77,7 @@ export const CreateDailyLog = () => {
         />
       ))}
       <Button asChild>
-        <Input type='submit' />
+        <Input type='submit' disabled={isPending} />
       </Button>
     </Form>
   );
