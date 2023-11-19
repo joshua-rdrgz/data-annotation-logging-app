@@ -1,17 +1,17 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { DailyLog } from '@prisma/client';
+import { Log } from '@prisma/client';
 import { DataTable } from '@/ui/custom/DataTable';
 
-const DAILY_LOGS_COLUMNS: ColumnDef<DailyLog>[] = [
+const LOGS_COLUMNS: ColumnDef<Log>[] = [
   {
     accessorKey: 'date',
     header: 'Date',
     cell: ({ row }) => row.getValue('date'),
   },
   {
-    accessorKey: 'name',
+    accessorKey: 'projectName',
     header: 'Project Name',
-    cell: ({ row }) => row.getValue('name'),
+    cell: ({ row }) => row.getValue('projectName'),
   },
   {
     accessorKey: 'tasksCompleted',
@@ -35,10 +35,10 @@ const DAILY_LOGS_COLUMNS: ColumnDef<DailyLog>[] = [
   },
 ];
 
-interface DailyLogsTableProps {
-  data: DailyLog[];
+interface LogsTableProps {
+  data: Log[];
 }
 
-export const DailyLogsTable = ({ data }: DailyLogsTableProps) => {
-  return <DataTable data={data} columns={DAILY_LOGS_COLUMNS} />;
+export const LogsTable = ({ data }: LogsTableProps) => {
+  return <DataTable data={data} columns={LOGS_COLUMNS} />;
 };

@@ -1,14 +1,15 @@
 import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
-import { dailyLogClientService } from '@/services/client/dailyLog';
-import { CreateDailyLog } from '@/features/daily-logs/CreateDailyLog';
-import { DailyLogsTable } from '@/features/daily-logs/DailyLogsTable';
+import { QueryKeys } from '@/lib/queryKeys';
+import { logClientService } from '@/services/client/log';
+import { CreateLog } from '@/features/logs/CreateLog';
+import { LogsTable } from '@/features/logs/LogsTable';
 
 export const getStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['daily-logs'],
-    queryFn: dailyLogClientService.getDailyLogs,
+    queryKey: [QueryKeys.LOGS],
+    queryFn: logClientService.getLogs,
   });
 
   return {
@@ -20,15 +21,15 @@ export const getStaticProps = async () => {
 
 export default function DailyLogsPage() {
   const { data: dailyLogs } = useQuery({
-    queryKey: ['daily-logs'],
-    queryFn: dailyLogClientService.getDailyLogs,
+    queryKey: [QueryKeys.LOGS],
+    queryFn: logClientService.getLogs,
   });
 
   return (
     <>
       <h1>DailyLogs Page</h1>
-      <DailyLogsTable data={dailyLogs || []} />
-      <CreateDailyLog />
+      <LogsTable data={dailyLogs || []} />
+      <CreateLog />
     </>
   );
 }

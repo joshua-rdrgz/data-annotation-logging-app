@@ -1,20 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { DailyLog } from '@prisma/client';
-import { dailyLogAPIService } from '@/services/server/dailyLog';
+import { Log } from '@prisma/client';
+import { logAPIService } from '@/services/server/log';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let data: DailyLog | DailyLog[];
+  let data: Log | Log[];
 
   try {
     switch (req.method) {
       case 'GET':
-        data = await dailyLogAPIService.getDailyLogs();
+        data = await logAPIService.getLogs();
         break;
       case 'POST':
-        data = await dailyLogAPIService.createDailyLog(req.body);
+        data = await logAPIService.createLog(req.body);
         break;
       default:
         throw new Error('This route only supports GET and POST requests.');
@@ -25,6 +25,7 @@ export default async function handler(
       data,
     });
   } catch (error: any) {
+    console.error('💥 SERVER ERROR 💥: ', error.message);
     res.status(500).json({
       status: 'error',
       message: `Something went wrong on server: ${error.message}`,

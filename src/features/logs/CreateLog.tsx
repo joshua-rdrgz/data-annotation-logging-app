@@ -1,18 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { QueryKeys } from '@/lib/queryKeys';
 import { useQueryClientInstance } from '@/context/query-provider';
-import { dailyLogSchema, type DailyLogSchema } from '@/schemas/dailyLogSchema';
-import { dailyLogClientService } from '@/services/client/dailyLog';
-import { DailyLogItem } from '@/features/daily-logs/DailyLogItem';
+import { logSchema, type LogSchema } from '@/schemas/logSchema';
+import { logClientService } from '@/services/client/log';
+import { LogItem } from '@/features/logs/LogItem';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';
 
 const INPUTS = [
   {
-    name: 'name' as const,
-    label: 'Task Name',
+    name: 'projectName' as const,
+    label: 'Project Name',
   },
   {
     name: 'tasksCompleted' as const,
@@ -37,11 +38,11 @@ const INPUTS = [
   },
 ];
 
-export const CreateDailyLog = () => {
-  const formMethods = useForm<DailyLogSchema>({
-    resolver: zodResolver(dailyLogSchema),
+export const CreateLog = () => {
+  const formMethods = useForm<LogSchema>({
+    resolver: zodResolver(logSchema),
     defaultValues: {
-      name: '',
+      projectName: '',
       tasksCompleted: 0,
       minutesWorked: 0,
       hourlyRate: 0,
@@ -50,15 +51,18 @@ export const CreateDailyLog = () => {
 
   const { queryClient } = useQueryClientInstance();
 
-  const { mutate: createDailyLog, isPending } = useMutation({
-    mutationFn: dailyLogClientService.createDailyLog,
-    onSuccess(data) {
-      queryClient.refetchQueries({ queryKey: ['daily-logs'] });
+  const { mutate: createLog, isPending } = useMutation({
+    mutationFn: logClientService.createLog,
+    onSuccess() {
+      queryClient.refetchQueries({ queryKey: [QueryKeys.LOGS] });
       formMethods.reset();
+    },
+    onError(error) {
+      console.error('🔥 ERROR 🔥: ', error.message);
     },
   });
 
-  const onSubmit = formMethods.handleSubmit((values) => createDailyLog(values));
+  const onSubmit = formMethods.handleSubmit((values) => createLog(values));
 
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit} className='space-y-3'>
@@ -68,11 +72,7 @@ export const CreateDailyLog = () => {
           name={input.name}
           disabled={isPending}
           render={({ field: { onChange, value } }) => (
-            <DailyLogItem
-              onChange={onChange}
-              value={value}
-              label={input.label}
-            />
+            <LogItem onChange={onChange} value={value} label={input.label} />
           )}
         />
       ))}

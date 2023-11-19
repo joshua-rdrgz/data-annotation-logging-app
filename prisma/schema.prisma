@@ -8,10 +8,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model DailyLog {
+model Log {
   id             String  @id @default(cuid())
   date           String
-  name           String
+  projectName    String
   tasksCompleted Int
   minutesWorked  Int
   hourlyRate     Int
