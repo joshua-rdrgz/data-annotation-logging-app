@@ -6,7 +6,7 @@ class DailyLogClientService {
     try {
       const { data } = await axios.post('/api/daily-logs', {
         ...values,
-        date: new Date().toISOString(),
+        date: new Date().toLocaleDateString(),
       });
       return data.data;
     } catch (error: any) {
