@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-hot-toast';
 import { QueryKeys } from '@/lib/queryKeys';
 import { useQueryClientInstance } from '@/context/query-provider';
 import { logSchema, type LogSchema } from '@/schemas/logSchema';
@@ -54,10 +55,16 @@ export const CreateLog = () => {
   const { mutate: createLog, isPending } = useMutation({
     mutationFn: logClientService.createLog,
     onSuccess() {
+      toast.success('Log successfully created', {
+        icon: '🎉',
+      });
       queryClient.refetchQueries({ queryKey: [QueryKeys.LOGS] });
       formMethods.reset();
     },
     onError(error) {
+      toast.error('Uh oh, something went wrong....', {
+        icon: '💥',
+      });
       console.error('🔥 ERROR 🔥: ', error.message);
     },
   });

@@ -1,6 +1,7 @@
 import { type AppProps } from 'next/app';
 import { HydrationBoundary } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast';
 import { AppProviders } from '@/context/AppProviders';
 import { AppLayout } from '@/ui/custom/AppLayout';
 
@@ -15,6 +16,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </AppLayout>
         <ReactQueryDevtools initialIsOpen={false} />
       </HydrationBoundary>
+      <Toaster />
     </AppProviders>
   );
 }
