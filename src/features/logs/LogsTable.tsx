@@ -1,37 +1,78 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import { Log } from '@prisma/client';
 import { DataTable } from '@/ui/custom/DataTable';
+import { DataTableCell } from '@/ui/custom/DataTableCell';
+import { currency } from '@/lib/utils';
+import { cva } from 'class-variance-authority';
+
+const createHeaderCell = (child: any, className?: string) => {
+  return function displayCell() {
+    return <DataTableCell className={className}>{child}</DataTableCell>;
+  };
+};
+
+const createContentCell = (child: any, className?: string) => (
+  <DataTableCell className={className}>{child}</DataTableCell>
+);
+
+const tableCellBoolStyles = cva(
+  'text-slate-200 dark:text-slate-800 rounded-sm p-2 font-bold',
+  {
+    variants: {
+      isReady: {
+        true: 'bg-green-800 dark:bg-green-200',
+        false: 'bg-red-800 dark:bg-red-200',
+      },
+    },
+    defaultVariants: {
+      isReady: false,
+    },
+  }
+);
 
 const LOGS_COLUMNS: ColumnDef<Log>[] = [
   {
     accessorKey: 'date',
-    header: 'Date',
-    cell: ({ row }) => row.getValue('date'),
+    header: createHeaderCell('Date'),
+    cell: ({ row }) => createContentCell(row.getValue('date')),
   },
   {
     accessorKey: 'projectName',
-    header: 'Project Name',
-    cell: ({ row }) => row.getValue('projectName'),
+    header: createHeaderCell('Project Name'),
+    cell: ({ row }) => createContentCell(row.getValue('projectName')),
   },
   {
     accessorKey: 'tasksCompleted',
-    header: 'Tasks Completed',
-    cell: ({ row }) => row.getValue('tasksCompleted'),
+    header: createHeaderCell('Tasks Completed'),
+    cell: ({ row }) => createContentCell(row.getValue('tasksCompleted')),
   },
   {
     accessorKey: 'minutesWorked',
-    header: 'Minutes Worked',
-    cell: ({ row }) => row.getValue('minutesWorked'),
+    header: createHeaderCell('Mins Worked'),
+    cell: ({ row }) => createContentCell(row.getValue('minutesWorked')),
   },
   {
     accessorKey: 'hourlyRate',
-    header: 'Hourly Rate',
-    cell: ({ row }) => row.getValue('hourlyRate'),
+    header: createHeaderCell('$ Per Hour'),
+    cell: ({ row }) => createContentCell(currency(row.getValue('hourlyRate'))),
+  },
+  {
+    accessorKey: 'readyToPayOut',
+    header: createHeaderCell('Ready To Pay Out?'),
+    cell: ({ row }) => {
+      const isReady = row.getValue('readyToPayOut') as boolean;
+      const cellContent = isReady ? 'YES' : 'NO';
+      return createContentCell(cellContent, tableCellBoolStyles({ isReady }));
+    },
   },
   {
     accessorKey: 'paidOut',
-    header: 'Paid Out?',
-    cell: ({ row }) => (row.getValue('paidOut') ? 'YES' : 'NO'),
+    header: createHeaderCell('Paid Out?'),
+    cell: ({ row }) => {
+      const isReady = row.getValue('paidOut') as boolean;
+      const cellContent = isReady ? 'YES' : 'NO';
+      return createContentCell(cellContent, tableCellBoolStyles({ isReady }));
+    },
   },
 ];
 
