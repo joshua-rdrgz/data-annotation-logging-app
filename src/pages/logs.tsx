@@ -1,15 +1,17 @@
 import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '@/lib/queryKeys';
+import { logAPIService } from '@/services/server/log';
 import { logClientService } from '@/services/client/log';
 import { CreateLog } from '@/features/logs/CreateLog';
 import { LogsTable } from '@/features/logs/LogsTable';
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: [QueryKeys.LOGS],
-    queryFn: logClientService.getLogs,
+    // logClientService does not work here
+    queryFn: logAPIService.getLogs,
   });
 
   return {
@@ -19,16 +21,16 @@ export const getStaticProps = async () => {
   };
 };
 
-export default function DailyLogsPage() {
-  const { data: dailyLogs } = useQuery({
+export default function LogsPage() {
+  const { data: logs } = useQuery({
     queryKey: [QueryKeys.LOGS],
     queryFn: logClientService.getLogs,
   });
 
   return (
     <>
-      <h1>DailyLogs Page</h1>
-      <LogsTable data={dailyLogs || []} />
+      <h1>Logs Page</h1>
+      <LogsTable data={logs || []} />
       <CreateLog />
     </>
   );
