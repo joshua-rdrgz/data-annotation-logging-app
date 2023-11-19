@@ -4,6 +4,7 @@ import { DataTable } from '@/ui/custom/DataTable';
 import { DataTableCell } from '@/ui/custom/DataTableCell';
 import { currency } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
+import { LogsRowActions } from './LogsRowActions';
 
 const createHeaderCell = (child: any, className?: string) => {
   return function displayCell() {
@@ -72,6 +73,15 @@ const LOGS_COLUMNS: ColumnDef<Log>[] = [
       const isReady = row.getValue('paidOut') as boolean;
       const cellContent = isReady ? 'YES' : 'NO';
       return createContentCell(cellContent, tableCellBoolStyles({ isReady }));
+    },
+  },
+  {
+    id: 'actions',
+    header: createHeaderCell('Actions'),
+    cell: ({ row }) => {
+      const logId = row.original.id;
+
+      return createContentCell(<LogsRowActions logId={logId} />);
     },
   },
 ];
