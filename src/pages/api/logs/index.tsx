@@ -7,20 +7,23 @@ export default async function handler(
   res: NextApiResponse
 ) {
   let data: Log | Log[];
+  let resWithStatus: NextApiResponse<any>;
 
   try {
     switch (req.method) {
       case 'GET':
         data = await logAPIService.getLogs();
+        resWithStatus = res.status(200);
         break;
       case 'POST':
         data = await logAPIService.createLog(req.body);
+        resWithStatus = res.status(201);
         break;
       default:
         throw new Error('This route only supports GET and POST requests.');
     }
 
-    res.status(200).json({
+    resWithStatus.json({
       status: 'success',
       data,
     });

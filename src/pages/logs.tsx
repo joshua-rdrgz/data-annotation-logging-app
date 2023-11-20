@@ -1,9 +1,9 @@
 import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '@/lib/queryKeys';
 import { logAPIService } from '@/services/server/log';
-import { logClientService } from '@/services/client/log';
 import { CreateLog } from '@/features/logs/CreateLog';
 import { LogsTable } from '@/features/logs/LogsTable';
+import { useLogs } from '@/features/logs/hooks/useLogs';
 
 export const getServerSideProps = async () => {
   const queryClient = new QueryClient();
@@ -22,10 +22,7 @@ export const getServerSideProps = async () => {
 };
 
 export default function LogsPage() {
-  const { data: logs } = useQuery({
-    queryKey: [QueryKeys.LOGS],
-    queryFn: logClientService.getLogs,
-  });
+  const { logs } = useLogs();
 
   return (
     <>

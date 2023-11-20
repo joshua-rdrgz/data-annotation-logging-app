@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import { DeleteLogItem } from '@/features/logs/actions/DeleteLogItem';
+import { EditLogItem } from '@/features/logs/actions/EditLogItem';
 import * as DMenu from '@/ui/dropdown-menu';
 import { Button } from '@/ui/button';
 
@@ -21,7 +22,7 @@ export const LogActions = ({ logId }: { logId: string }) => {
       <DMenu.Content align='end'>
         <DMenu.Item>🎉 Assign Paid Out</DMenu.Item>
         <DMenu.Item>👍🏽 Assign Ready to Pay Out</DMenu.Item>
-        <DMenu.Item>✏️ Edit</DMenu.Item>
+        <EditLogItem logId={logId} onDialogClose={() => setOpen(false)} />
         <DeleteLogItem logId={logId} onDialogClose={() => setOpen(false)} />
       </DMenu.Content>
     </DMenu.Root>

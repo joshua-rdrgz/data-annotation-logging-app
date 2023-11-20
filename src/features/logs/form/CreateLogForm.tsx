@@ -1,16 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-hot-toast';
-import { QueryKeys } from '@/lib/queryKeys';
-import { useQueryClientInstance } from '@/context/query-provider';
-import { logSchema, type LogSchema } from '@/schemas/logSchema';
-import { logClientService } from '@/services/client/log';
+import { createLogSchema, type CreateLogSchema } from '@/schemas/logSchema';
+import { useCreateLog } from '@/features/logs/hooks/useCreateLog';
 import { LogFormInput } from '@/features/logs/form/LogFormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';
-import React from 'react';
 
 const INPUTS = [
   {
@@ -47,8 +42,8 @@ interface CreateLogFormProps {
 export const CreateLogForm: React.FC<CreateLogFormProps> = ({
   onFormSuccess,
 }) => {
-  const formMethods = useForm<LogSchema>({
-    resolver: zodResolver(logSchema),
+  const formMethods = useForm<CreateLogSchema>({
+    resolver: zodResolver(createLogSchema),
     defaultValues: {
       projectName: '',
       tasksCompleted: 0,
@@ -57,23 +52,10 @@ export const CreateLogForm: React.FC<CreateLogFormProps> = ({
     },
   });
 
-  const { queryClient } = useQueryClientInstance();
-
-  const { mutate: createLog, isPending } = useMutation({
-    mutationFn: logClientService.createLog,
+  const { createLog, isCreatingLog } = useCreateLog({
     onSuccess() {
-      toast.success('Log successfully created', {
-        icon: '🎉',
-      });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.LOGS] });
       onFormSuccess?.();
       formMethods.reset();
-    },
-    onError(error) {
-      toast.error('Uh oh, something went wrong....', {
-        icon: '💥',
-      });
-      console.error('🔥 ERROR 🔥: ', error.message);
     },
   });
 
@@ -85,7 +67,7 @@ export const CreateLogForm: React.FC<CreateLogFormProps> = ({
         <Form.Field
           key={input.name}
           name={input.name}
-          disabled={isPending}
+          disabled={isCreatingLog}
           render={({ field: { onChange, value } }) => (
             <LogFormInput
               onChange={onChange}
@@ -96,7 +78,7 @@ export const CreateLogForm: React.FC<CreateLogFormProps> = ({
         />
       ))}
       <Button asChild>
-        <Input type='submit' disabled={isPending} />
+        <Input type='submit' disabled={isCreatingLog} />
       </Button>
     </Form>
   );

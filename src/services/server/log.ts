@@ -10,6 +10,21 @@ class LogAPIService {
     return await prisma.log.findMany();
   }
 
+  async getLog(logId: string) {
+    return await prisma.log.findUnique({
+      where: {
+        id: logId,
+      },
+    });
+  }
+
+  async editLog(logId: string, data: Log) {
+    return await prisma.log.update({
+      where: { id: logId },
+      data,
+    });
+  }
+
   async deleteLog(logId: string) {
     return await prisma.log.delete({
       where: {
