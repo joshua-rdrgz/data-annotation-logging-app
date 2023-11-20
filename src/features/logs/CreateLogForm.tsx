@@ -6,7 +6,7 @@ import { QueryKeys } from '@/lib/queryKeys';
 import { useQueryClientInstance } from '@/context/query-provider';
 import { logSchema, type LogSchema } from '@/schemas/logSchema';
 import { logClientService } from '@/services/client/log';
-import { LogItem } from '@/features/logs/LogItem';
+import { LogFormInput } from '@/features/logs/LogFormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';
@@ -87,7 +87,11 @@ export const CreateLogForm: React.FC<CreateLogFormProps> = ({
           name={input.name}
           disabled={isPending}
           render={({ field: { onChange, value } }) => (
-            <LogItem onChange={onChange} value={value} label={input.label} />
+            <LogFormInput
+              onChange={onChange}
+              value={value}
+              label={input.label}
+            />
           )}
         />
       ))}
