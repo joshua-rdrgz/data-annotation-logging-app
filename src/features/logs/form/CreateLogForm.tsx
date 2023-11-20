@@ -6,7 +6,7 @@ import { QueryKeys } from '@/lib/queryKeys';
 import { useQueryClientInstance } from '@/context/query-provider';
 import { logSchema, type LogSchema } from '@/schemas/logSchema';
 import { logClientService } from '@/services/client/log';
-import { LogFormInput } from '@/features/logs/LogFormInput';
+import { LogFormInput } from '@/features/logs/form/LogFormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';

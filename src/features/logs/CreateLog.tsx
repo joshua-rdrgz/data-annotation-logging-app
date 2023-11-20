@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CreateLogForm } from '@/features/logs/CreateLogForm';
+import { CreateLogForm } from '@/features/logs/form/CreateLogForm';
 import * as D from '@/ui/dialog';
 import { Dialog } from '@/ui/custom/Dialog';
 import { Button } from '@/ui/button';

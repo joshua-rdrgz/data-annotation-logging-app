@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Log } from '@prisma/client';
-import { LogActions } from '@/features/logs/LogActions';
+import { LogActions } from '@/features/logs/actions/LogActions';
 import { DataTable } from '@/ui/custom/DataTable';
 import { DataTableCell } from '@/ui/custom/DataTableCell';
 import { currency } from '@/lib/utils';

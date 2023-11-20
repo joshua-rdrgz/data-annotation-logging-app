@@ -9,6 +9,14 @@ class LogAPIService {
   async getLogs() {
     return await prisma.log.findMany();
   }
+
+  async deleteLog(logId: string) {
+    return await prisma.log.delete({
+      where: {
+        id: logId,
+      },
+    });
+  }
 }
 
 const logAPIService = new LogAPIService();

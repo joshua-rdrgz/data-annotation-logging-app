@@ -15,6 +15,11 @@ class LogClientService {
     const { data } = await axios.get(APIRoutes.LOGS);
     return data.data;
   }
+
+  async deleteLog(logId: string) {
+    const { data } = await axios.delete(APIRoutes.BASE_LOG + logId);
+    return data.data;
+  }
 }
 
 const logClientService = new LogClientService();
