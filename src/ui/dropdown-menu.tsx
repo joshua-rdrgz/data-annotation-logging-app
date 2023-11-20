@@ -1,8 +1,7 @@
-'use client';
-
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Circle } from 'lucide-react';
+import * as Dialog from '@/ui/dialog';
 
 import { cn } from '@/lib/utils';
 
@@ -135,6 +134,37 @@ const RadioItem = React.forwardRef<
 ));
 RadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
+interface DialogItemProps {
+  triggerContent: React.ReactNode;
+  onSelect?(): any;
+}
+
+const DialogItem = React.forwardRef<
+  React.ElementRef<typeof Dialog.Root>,
+  DialogItemProps & React.ComponentPropsWithRef<typeof Dialog.Root>
+>(({ open, onOpenChange, onSelect, triggerContent, children }, ref) => {
+  return (
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Trigger asChild>
+        <Item
+          ref={ref}
+          onSelect={(e) => {
+            e.preventDefault();
+            onSelect?.();
+          }}
+        >
+          {triggerContent}
+        </Item>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+      </Dialog.Portal>
+      <Dialog.Content>{children}</Dialog.Content>
+    </Dialog.Root>
+  );
+});
+DialogItem.displayName = 'DropdownMenu.DialogItem';
+
 const Label = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
@@ -185,6 +215,7 @@ export {
   Item,
   CheckboxItem,
   RadioItem,
+  DialogItem,
   Label,
   Separator,
   Shortcut,
