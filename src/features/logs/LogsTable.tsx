@@ -83,6 +83,7 @@ const LOGS_COLUMNS: ColumnDef<Log>[] = [
 
       return createContentCell(<LogsRowActions logId={logId} />);
     },
+    enableHiding: false,
   },
 ];
 
@@ -91,5 +92,15 @@ interface LogsTableProps {
 }
 
 export const LogsTable = ({ data }: LogsTableProps) => {
-  return <DataTable data={data} columns={LOGS_COLUMNS} />;
+  return (
+    <DataTable
+      data={data}
+      columns={LOGS_COLUMNS}
+      columnVisibility={{
+        tasksCompleted: false,
+        minutesWorked: false,
+        hourlyRate: false,
+      }}
+    />
+  );
 };
