@@ -2,7 +2,7 @@ import { Button } from '@/ui/button';
 import * as DropdownMenu from '@/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 
-export const LogsRowActions = ({ logId }: { logId: string }) => {
+export const LogActions = ({ logId }: { logId: string }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
