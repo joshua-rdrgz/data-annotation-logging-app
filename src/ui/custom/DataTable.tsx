@@ -4,8 +4,11 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
+  type Table as ReactTable,
   type ColumnDef,
   type VisibilityState,
+  type ColumnFiltersState,
 } from '@tanstack/react-table';
 import * as Table from '@/ui/table';
 import { DTColumnVisibility } from '@/ui/custom/DTColumnVisibility';
@@ -14,17 +17,20 @@ import { DTPagination } from '@/ui/custom/DTPagination';
 interface DataTableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData>[];
+  defaultFilterComponent?({ table }: { table: ReactTable<TData> }): JSX.Element;
   columnVisibility?: VisibilityState;
 }
 
 export function DataTable<TData>({
   data,
   columns,
+  defaultFilterComponent: DefaultFilterComponent,
   columnVisibility: initialColumnVisibility = {},
 }: DataTableProps<TData>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     initialColumnVisibility
   );
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -32,11 +38,14 @@ export function DataTable<TData>({
 
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
 
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: setColumnFilters,
 
     state: {
       columnVisibility,
+      columnFilters,
     },
 
     initialState: {
@@ -49,6 +58,11 @@ export function DataTable<TData>({
   return (
     <>
       <div className='flex items-center py-4'>
+        {DefaultFilterComponent ? (
+          <DefaultFilterComponent table={table} />
+        ) : (
+          <></>
+        )}
         <DTColumnVisibility table={table} />
       </div>
       <div className='rounded-md border'>

@@ -1,15 +1,30 @@
 import { cva } from 'class-variance-authority';
-import { type ColumnDef } from '@tanstack/react-table';
+import { Column, type ColumnDef } from '@tanstack/react-table';
 import { LogWithEarnings } from '@/store/createLogStore';
 import { LogActions } from '@/features/logs/actions/LogActions';
+import { LogsDefaultFilter } from '@/features/logs/LogsDefaultFilter';
 import { DataTable } from '@/ui/custom/DataTable';
 import { DataTableCell } from '@/ui/custom/DataTableCell';
 import { currency } from '@/lib/utils';
 
-const createHeaderCell = (child: any, className?: string) => {
-  return function displayCell() {
-    return <DataTableCell className={className}>{child}</DataTableCell>;
-  };
+const createHeaderCell = (
+  child: any,
+  {
+    className,
+    column,
+  }: { className?: string; column?: Column<LogWithEarnings> } = {}
+) => {
+  const shouldFilter = child === 'Date' || child === 'Project Name';
+  return (
+    <DataTableCell
+      isFilterable={shouldFilter}
+      filterValue={column?.getFilterValue() as string}
+      filterOnChange={(e) => column?.setFilterValue(e.target.value)}
+      className={className}
+    >
+      {child}
+    </DataTableCell>
+  );
 };
 
 const createContentCell = (child: any, className?: string) => (
@@ -34,37 +49,37 @@ const tableCellBoolStyles = cva(
 const LOGS_COLUMNS: ColumnDef<LogWithEarnings>[] = [
   {
     accessorKey: 'date',
-    header: createHeaderCell('Date'),
+    header: ({ column }) => createHeaderCell('Date', { column }),
     cell: ({ row }) => createContentCell(row.getValue('date')),
   },
   {
     accessorKey: 'projectName',
-    header: createHeaderCell('Project Name'),
+    header: ({ column }) => createHeaderCell('Project Name', { column }),
     cell: ({ row }) => createContentCell(row.getValue('projectName')),
   },
   {
-    accessorKey: 'earnings',
-    header: createHeaderCell('$ Earned'),
-    cell: ({ row }) => createContentCell(currency(row.getValue('earnings'))),
-  },
-  {
     accessorKey: 'tasksCompleted',
-    header: createHeaderCell('Tasks Completed'),
+    header: ({ column }) => createHeaderCell('Tasks Completed'),
     cell: ({ row }) => createContentCell(row.getValue('tasksCompleted')),
   },
   {
     accessorKey: 'minutesWorked',
-    header: createHeaderCell('Mins Worked'),
+    header: ({ column }) => createHeaderCell('Mins Worked'),
     cell: ({ row }) => createContentCell(row.getValue('minutesWorked')),
   },
   {
     accessorKey: 'hourlyRate',
-    header: createHeaderCell('$ Per Hour'),
+    header: ({ column }) => createHeaderCell('$ Per Hour'),
     cell: ({ row }) => createContentCell(currency(row.getValue('hourlyRate'))),
   },
   {
+    accessorKey: 'earnings',
+    header: ({ column }) => createHeaderCell('$ Earned'),
+    cell: ({ row }) => createContentCell(currency(row.getValue('earnings'))),
+  },
+  {
     accessorKey: 'readyToPayOut',
-    header: createHeaderCell('Ready To Pay Out?'),
+    header: ({ column }) => createHeaderCell('Ready To Pay Out?'),
     cell: ({ row }) => {
       const isReady = row.getValue('readyToPayOut') as boolean;
       const cellContent = isReady ? 'YES' : 'NO';
@@ -73,7 +88,7 @@ const LOGS_COLUMNS: ColumnDef<LogWithEarnings>[] = [
   },
   {
     accessorKey: 'paidOut',
-    header: createHeaderCell('Paid Out?'),
+    header: ({ column }) => createHeaderCell('Paid Out?'),
     cell: ({ row }) => {
       const isReady = row.getValue('paidOut') as boolean;
       const cellContent = isReady ? 'YES' : 'NO';
@@ -82,7 +97,7 @@ const LOGS_COLUMNS: ColumnDef<LogWithEarnings>[] = [
   },
   {
     id: 'actions',
-    header: createHeaderCell('Actions'),
+    header: ({ column }) => createHeaderCell('Actions'),
     cell: ({ row }) => {
       const logId = row.original.id;
 
@@ -101,6 +116,7 @@ export const LogsTable = ({ data }: LogsTableProps) => {
     <DataTable
       data={data}
       columns={LOGS_COLUMNS}
+      defaultFilterComponent={LogsDefaultFilter}
       columnVisibility={{
         tasksCompleted: false,
         minutesWorked: false,
