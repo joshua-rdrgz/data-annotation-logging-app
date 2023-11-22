@@ -1,6 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { useQueryClientInstance } from '@/context/query-provider';
 import { logClientService } from '@/services/client/log';
 import { QueryKeys } from '@/lib/queryKeys';
 
@@ -10,7 +9,7 @@ interface UseEditLogProps {
 }
 
 export const useEditLog = ({ logId, onSuccess }: UseEditLogProps) => {
-  const { queryClient } = useQueryClientInstance();
+  const queryClient = useQueryClient();
 
   const { mutate: editLog, isPending: isEditingLog } = useMutation({
     mutationFn: logClientService.editLog,

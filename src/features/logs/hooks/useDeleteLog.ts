@@ -1,11 +1,10 @@
-import { useQueryClientInstance } from '@/context/query-provider';
+import toast from 'react-hot-toast';
 import { QueryKeys } from '@/lib/queryKeys';
 import { logClientService } from '@/services/client/log';
-import { useMutation } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDeleteLog = () => {
-  const { queryClient } = useQueryClientInstance();
+  const queryClient = useQueryClient();
 
   const { mutate: deleteLog, isPending: isDeletingLog } = useMutation({
     mutationFn: logClientService.deleteLog,

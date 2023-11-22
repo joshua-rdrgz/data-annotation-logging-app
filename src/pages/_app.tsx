@@ -9,7 +9,7 @@ import './globals.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AppProviders>
+    <AppProviders pageProps={pageProps}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <AppLayout>
           <Component {...pageProps} />

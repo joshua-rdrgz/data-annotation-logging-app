@@ -1,28 +1,30 @@
-import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
-import { QueryKeys } from '@/lib/queryKeys';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { queryClientOptions } from '@/utils/constants';
 import { logAPIService } from '@/services/server/log';
 import { CreateLog } from '@/features/logs/CreateLog';
 import { LogsTable } from '@/features/logs/LogsTable';
-import { useLogs } from '@/features/logs/hooks/useLogs';
+import { useLogsWithEarnings } from '@/features/logs/hooks/useLogsWithEarnings';
+import { QueryKeys } from '@/lib/queryKeys';
+import { injectEarnings } from '@/utils/calculations';
 
 export const getServerSideProps = async () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient(queryClientOptions);
 
-  await queryClient.prefetchQuery({
+  const logs = await queryClient.fetchQuery({
     queryKey: [QueryKeys.LOGS],
-    // logClientService does not work here
     queryFn: logAPIService.getLogs,
   });
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      initialLogs: injectEarnings(logs),
     },
   };
 };
 
 export default function LogsPage() {
-  const { logs } = useLogs();
+  const { logs } = useLogsWithEarnings();
 
   return (
     <>
