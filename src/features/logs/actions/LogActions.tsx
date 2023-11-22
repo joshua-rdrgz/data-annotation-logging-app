@@ -37,9 +37,7 @@ function ReadyToPayOutItem({ logId }: { logId: string }) {
 
   return (
     <DMenu.Item onClick={() => toggleLogStatus('READY_TO_PAY_OUT')}>
-      {log?.readyToPayOut
-        ? '👎🏽 Unassign Ready to Pay Out'
-        : '👍🏽 Assign Ready to Pay Out'}
+      {log?.readyToPayOut ? '👎🏽 Not Ready to Pay Out?' : '👍🏽 Ready to Pay Out?'}
     </DMenu.Item>
   );
 }
@@ -50,7 +48,7 @@ function PaidOutItem({ logId }: { logId: string }) {
 
   return (
     <DMenu.Item onClick={() => toggleLogStatus('PAY_OUT')}>
-      {log?.paidOut ? '😭 Unassign Paid Out' : '🎉 Assign Paid Out'}
+      {log?.paidOut ? '😭 Not Paid Out?' : '🎉 Paid Out?'}
     </DMenu.Item>
   );
 }
