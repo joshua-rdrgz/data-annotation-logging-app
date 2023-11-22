@@ -3,12 +3,14 @@ import toast from 'react-hot-toast';
 import { logClientService } from '@/services/client/log';
 import { QueryKeys } from '@/lib/queryKeys';
 
-interface UseEditLogProps {
-  logId: string;
+interface UseEditLogOptions {
   onSuccess?(): void;
 }
 
-export const useEditLog = ({ logId, onSuccess }: UseEditLogProps) => {
+export const useEditLog = (
+  logId: string,
+  { onSuccess }: UseEditLogOptions = {}
+) => {
   const queryClient = useQueryClient();
 
   const { mutate: editLog, isPending: isEditingLog } = useMutation({
@@ -25,7 +27,7 @@ export const useEditLog = ({ logId, onSuccess }: UseEditLogProps) => {
       toast.error('Uh oh, something went wrong....', {
         icon: '💥',
       });
-      console.error('🔥 ERROR 🔥: ', error.message);
+      console.error('🔥 ERROR FROM useEditLog 🔥: ', error.message);
     },
   });
 

@@ -58,7 +58,7 @@ interface EditLogFormProps {
 }
 
 export const EditLogForm = ({ log, onSuccess }: EditLogFormProps) => {
-  const { editLog, isEditingLog } = useEditLog({ logId: log.id, onSuccess });
+  const { editLog, isEditingLog } = useEditLog(log.id, { onSuccess });
 
   const formMethods = useForm<EditLogSchema>({
     resolver: zodResolver(editLogSchema),
