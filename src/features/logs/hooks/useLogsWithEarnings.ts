@@ -13,8 +13,6 @@ export const useLogsWithEarnings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logs]);
 
-  console.log('logs from zustand: ', store.logs);
-
   return {
     logs: store.logs,
   };
