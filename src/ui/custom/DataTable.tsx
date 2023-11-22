@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import {
   useReactTable,
-  getCoreRowModel,
   flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
   type ColumnDef,
   type VisibilityState,
 } from '@tanstack/react-table';
 import * as Table from '@/ui/table';
 import { DTColumnVisibility } from '@/ui/custom/DTColumnVisibility';
+import { DTPagination } from '@/ui/custom/DTPagination';
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -27,12 +29,20 @@ export function DataTable<TData>({
   const table = useReactTable({
     data,
     columns,
+
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
 
     onColumnVisibilityChange: setColumnVisibility,
 
     state: {
       columnVisibility,
+    },
+
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
     },
   });
 
@@ -89,6 +99,7 @@ export function DataTable<TData>({
           </Table.Body>
         </Table.Root>
       </div>
+      <DTPagination table={table} />
     </>
   );
 }
