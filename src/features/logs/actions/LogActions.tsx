@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import { DeleteLogItem } from '@/features/logs/actions/DeleteLogItem';
 import { EditLogItem } from '@/features/logs/actions/EditLogItem';
+import { useLog } from '@/features/logs/hooks/useLog';
+import { useLogStatus } from '@/features/logs/hooks/useLogStatus';
 import * as DMenu from '@/ui/dropdown-menu';
 import { Button } from '@/ui/button';
 
@@ -20,11 +22,35 @@ export const LogActions = ({ logId }: { logId: string }) => {
         </Button>
       </DMenu.Trigger>
       <DMenu.Content align='end'>
-        <DMenu.Item>🎉 Assign Paid Out</DMenu.Item>
-        <DMenu.Item>👍🏽 Assign Ready to Pay Out</DMenu.Item>
+        <ReadyToPayOutItem logId={logId} />
+        <PaidOutItem logId={logId} />
         <EditLogItem logId={logId} onDialogClose={() => setOpen(false)} />
         <DeleteLogItem logId={logId} onDialogClose={() => setOpen(false)} />
       </DMenu.Content>
     </DMenu.Root>
   );
 };
+
+function ReadyToPayOutItem({ logId }: { logId: string }) {
+  const { log } = useLog(logId);
+  const { toggleLogStatus } = useLogStatus(logId);
+
+  return (
+    <DMenu.Item onClick={() => toggleLogStatus('READY_TO_PAY_OUT')}>
+      {log?.readyToPayOut
+        ? '👎🏽 Unassign Ready to Pay Out'
+        : '👍🏽 Assign Ready to Pay Out'}
+    </DMenu.Item>
+  );
+}
+
+function PaidOutItem({ logId }: { logId: string }) {
+  const { log } = useLog(logId);
+  const { toggleLogStatus } = useLogStatus(logId);
+
+  return (
+    <DMenu.Item onClick={() => toggleLogStatus('PAY_OUT')}>
+      {log?.paidOut ? '😭 Unassign Paid Out' : '🎉 Assign Paid Out'}
+    </DMenu.Item>
+  );
+}
