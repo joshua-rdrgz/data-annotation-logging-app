@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 import { type ColumnDef } from '@tanstack/react-table';
-import { Log } from '@prisma/client';
+import { LogWithEarnings } from '@/store/createLogStore';
 import { LogActions } from '@/features/logs/actions/LogActions';
 import { DataTable } from '@/ui/custom/DataTable';
 import { DataTableCell } from '@/ui/custom/DataTableCell';
@@ -31,7 +31,7 @@ const tableCellBoolStyles = cva(
   }
 );
 
-const LOGS_COLUMNS: ColumnDef<Log>[] = [
+const LOGS_COLUMNS: ColumnDef<LogWithEarnings>[] = [
   {
     accessorKey: 'date',
     header: createHeaderCell('Date'),
@@ -41,6 +41,11 @@ const LOGS_COLUMNS: ColumnDef<Log>[] = [
     accessorKey: 'projectName',
     header: createHeaderCell('Project Name'),
     cell: ({ row }) => createContentCell(row.getValue('projectName')),
+  },
+  {
+    accessorKey: 'earnings',
+    header: createHeaderCell('$ Earned'),
+    cell: ({ row }) => createContentCell(currency(row.getValue('earnings'))),
   },
   {
     accessorKey: 'tasksCompleted',
@@ -88,7 +93,7 @@ const LOGS_COLUMNS: ColumnDef<Log>[] = [
 ];
 
 interface LogsTableProps {
-  data: Log[];
+  data: LogWithEarnings[];
 }
 
 export const LogsTable = ({ data }: LogsTableProps) => {
