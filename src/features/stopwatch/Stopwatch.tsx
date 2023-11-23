@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { cva } from 'class-variance-authority';
+import { useStopwatchStore } from '@/store/useStopwatchStore';
+import { StopwatchClock } from '@/features/stopwatch/StopwatchClock';
+import { StopwatchFinishSequence } from '@/features/stopwatch/StopwatchFinishSequence';
 import * as Card from '@/ui/card';
 import { Button } from '@/ui/button';
-import { cva } from 'class-variance-authority';
-import { StopwatchClock } from './StopwatchClock';
-import { StopwatchFinishSequence } from './StopwatchFinishSequence';
 
 const startStopBtnStyles = cva('text-lg', {
   variants: {
@@ -16,9 +17,11 @@ const startStopBtnStyles = cva('text-lg', {
 });
 
 export const Stopwatch = () => {
-  const [time, setTime] = useState(0);
-  const [timeIsRunning, setTimeIsRunning] = useState(false);
-  const [timeHasStarted, setTimeHasStarted] = useState(false);
+  const { time, timeIsRunning, timeHasStarted } = useStopwatchStore(
+    (state) => state.values
+  );
+  const { setTime, setTimeIsRunning, toggleTimeIsRunning, setTimeHasStarted } =
+    useStopwatchStore((state) => state.methods);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -29,11 +32,13 @@ export const Stopwatch = () => {
 
     if (timeIsRunning) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
+        setTime(time + 10);
       }, 10);
     }
 
     return () => clearInterval(interval);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, timeIsRunning]);
 
   return (
@@ -46,12 +51,12 @@ export const Stopwatch = () => {
         </Card.Description>
       </Card.Header>
       <Card.Content className='my-2'>
-        <StopwatchClock time={time} />
+        <StopwatchClock />
       </Card.Content>
       <Card.Footer className='justify-center gap-5'>
         <Button
           className={startStopBtnStyles({ timeIsRunning })}
-          onClick={() => setTimeIsRunning((prev) => !prev)}
+          onClick={() => toggleTimeIsRunning()}
         >
           {timeIsRunning ? '🛑 Pause' : '🏁 Start'}
         </Button>

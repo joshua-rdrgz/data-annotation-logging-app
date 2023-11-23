@@ -10,15 +10,10 @@ import {
   MILLISECONDS_IN_CENTISECOND,
 } from '@/utils/constants';
 import { millisecondsToCentiseconds } from '@/utils/calculations';
+import { useStopwatchStore } from '@/store/useStopwatchStore';
 
-interface StopwatchClockProps {
-  /**
-   * UNIT: **milliseconds**
-   */
-  time: number;
-}
-
-export const StopwatchClock = ({ time }: StopwatchClockProps) => {
+export const StopwatchClock = () => {
+  const time = useStopwatchStore((state) => state.values.time);
   const calculations = {
     hours: ('0' + Math.floor(millisecondsToHours(time) % HOURS_IN_DAY)).slice(
       -2
