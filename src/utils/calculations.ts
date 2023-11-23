@@ -1,6 +1,5 @@
 import { Log } from '@prisma/client';
-
-const ONE_HOUR = 60;
+import { MINUTES_IN_HOUR } from '@/utils/constants';
 
 export const injectEarnings = (logs: Log[]) =>
   logs.map((log) => ({
@@ -9,4 +8,6 @@ export const injectEarnings = (logs: Log[]) =>
   }));
 
 const calculateEarnings = (log: Log) =>
-  (log.minutesWorked / ONE_HOUR) * log.hourlyRate;
+  (log.minutesWorked / MINUTES_IN_HOUR) * log.hourlyRate;
+
+export const millisecondsToCentiseconds = (time: number) => time / 10;

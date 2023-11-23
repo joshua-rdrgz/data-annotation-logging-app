@@ -20,6 +20,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <Link href='/dashboard'>Dashboard</Link>
             </li>
             <li className='shadow-sm'>
+              <Link href='/track'>Track Time</Link>
+            </li>
+            <li className='shadow-sm'>
               <Link href='/logs'>Logs</Link>
             </li>
           </ul>
