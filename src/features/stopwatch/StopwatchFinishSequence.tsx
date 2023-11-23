@@ -3,6 +3,8 @@ import { CreateStopwatchLogForm } from '@/features/stopwatch/forms/CreateStopwat
 import { Dialog } from '@/ui/custom/Dialog';
 import * as D from '@/ui/dialog';
 import { Button } from '@/ui/button';
+import { useStopwatchStore } from '@/store/useStopwatchStore';
+import { millisecondsToNearestMinute } from '@/utils/calculations';
 
 interface StopwatchFinishSequenceProps {
   onInitialize(): void;
@@ -12,14 +14,19 @@ export const StopwatchFinishSequence: React.FC<
   StopwatchFinishSequenceProps
 > = ({ onInitialize }) => {
   const [open, setOpen] = useState(false);
+  const time = useStopwatchStore((state) => state.values.time);
   return (
     <Dialog
       controlled
       open={open}
       onOpenChange={setOpen}
       triggerContent={
-        <Button className='text-lg' onClick={onInitialize}>
-          Finish
+        <Button
+          className='text-lg'
+          onClick={onInitialize}
+          disabled={millisecondsToNearestMinute(time) < 1}
+        >
+          🎊 Finish
         </Button>
       }
     >

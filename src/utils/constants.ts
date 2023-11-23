@@ -9,6 +9,7 @@ export const queryClientOptions: QueryClientConfig = {
 };
 
 export const MILLISECONDS_IN_CENTISECOND = 100;
+export const MILLISECONDS_IN_MINUTE = 60000;
 export const SECONDS_IN_MINUTE = 60;
 export const MINUTES_IN_HOUR = 60;
 export const HOURS_IN_DAY = 24;

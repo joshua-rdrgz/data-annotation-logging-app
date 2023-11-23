@@ -1,11 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useStopwatchStore } from '@/store/useStopwatchStore';
 import { createLogSchema, type CreateLogSchema } from '@/schemas/logSchema';
 import { useCreateLog } from '@/features/logs/hooks/useCreateLog';
 import { LogFormInput } from '@/features/logs/forms/LogFormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';
+import { millisecondsToNearestMinute } from '@/utils/calculations';
 
 const STEP_ONE_INPUTS = [
   {
@@ -42,12 +44,14 @@ interface CreateStopwatchLogFormProps {
 export const CreateStopwatchLogForm: React.FC<CreateStopwatchLogFormProps> = ({
   onFormSuccess,
 }) => {
+  const time = useStopwatchStore((state) => state.values.time);
+
   const formMethods = useForm<CreateLogSchema>({
     resolver: zodResolver(createLogSchema),
     defaultValues: {
       projectName: '',
       tasksCompleted: 0,
-      minutesWorked: 0,
+      minutesWorked: millisecondsToNearestMinute(time),
       hourlyRate: 0,
     },
   });
@@ -73,6 +77,7 @@ export const CreateStopwatchLogForm: React.FC<CreateStopwatchLogFormProps> = ({
               onChange={onChange}
               value={value}
               label={input.label}
+              disabled={input.name === 'minutesWorked'}
             />
           )}
         />
