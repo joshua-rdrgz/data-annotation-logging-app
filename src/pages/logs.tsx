@@ -28,7 +28,7 @@ export default function LogsPage() {
 
   return (
     <>
-      <h1>Logs Page</h1>
+      <h1 className='mx-auto text-3xl font-bold mt-7'>My Logs</h1>
       <LogsTable data={logs || []} />
       <CreateLog />
     </>
