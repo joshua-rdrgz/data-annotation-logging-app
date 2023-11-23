@@ -17,9 +17,14 @@ const startStopBtnStyles = cva('text-lg', {
 export const Stopwatch = () => {
   const [time, setTime] = useState(0);
   const [timeIsRunning, setTimeIsRunning] = useState(false);
+  const [timeHasStarted, setTimeHasStarted] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+
+    if (timeIsRunning && time === 0) {
+      setTimeHasStarted(true);
+    }
 
     if (timeIsRunning) {
       interval = setInterval(() => {
@@ -28,7 +33,7 @@ export const Stopwatch = () => {
     }
 
     return () => clearInterval(interval);
-  }, [timeIsRunning]);
+  }, [time, timeIsRunning]);
 
   return (
     <Card.Root as='section'>
@@ -49,6 +54,17 @@ export const Stopwatch = () => {
         >
           {timeIsRunning ? '🛑 Pause' : '🏁 Start'}
         </Button>
+        {timeHasStarted && (
+          <Button
+            className='text-lg'
+            onClick={() => {
+              setTimeIsRunning(false);
+              console.log('Time to finish up!');
+            }}
+          >
+            Finish
+          </Button>
+        )}
       </Card.Footer>
     </Card.Root>
   );
