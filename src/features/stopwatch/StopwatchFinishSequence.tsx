@@ -15,6 +15,8 @@ export const StopwatchFinishSequence: React.FC<
 > = ({ onInitialize }) => {
   const [open, setOpen] = useState(false);
   const time = useStopwatchStore((state) => state.values.time);
+  const resetStopwatch = useStopwatchStore((state) => state.methods.reset);
+
   return (
     <Dialog
       controlled
@@ -35,7 +37,12 @@ export const StopwatchFinishSequence: React.FC<
         <D.Description>
           Fill out the form to add your time to your logs.
         </D.Description>
-        <CreateStopwatchLogForm />
+        <CreateStopwatchLogForm
+          onFormSuccess={() => {
+            setOpen(false);
+            resetStopwatch();
+          }}
+        />
       </D.Header>
     </Dialog>
   );

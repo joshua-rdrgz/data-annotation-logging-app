@@ -15,6 +15,7 @@ interface StopwatchStoreState {
     setTimeIsRunning(to: boolean): void;
     toggleTimeIsRunning(): void;
     setTimeHasStarted(to: boolean): void;
+    reset(): void;
   };
 }
 
@@ -45,6 +46,16 @@ export const useStopwatchStore = create<StopwatchStoreState>()((set) => ({
         values: {
           ...state.values,
           timeHasStarted: to,
+        },
+      })),
+
+    reset: () =>
+      set((state) => ({
+        ...state,
+        values: {
+          time: 0,
+          timeIsRunning: false,
+          timeHasStarted: false,
         },
       })),
   },
