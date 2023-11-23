@@ -3,6 +3,7 @@ import * as Card from '@/ui/card';
 import { Button } from '@/ui/button';
 import { cva } from 'class-variance-authority';
 import { StopwatchClock } from './StopwatchClock';
+import { StopwatchFinishSequence } from './StopwatchFinishSequence';
 
 const startStopBtnStyles = cva('text-lg', {
   variants: {
@@ -55,15 +56,9 @@ export const Stopwatch = () => {
           {timeIsRunning ? '🛑 Pause' : '🏁 Start'}
         </Button>
         {timeHasStarted && (
-          <Button
-            className='text-lg'
-            onClick={() => {
-              setTimeIsRunning(false);
-              console.log('Time to finish up!');
-            }}
-          >
-            Finish
-          </Button>
+          <StopwatchFinishSequence
+            onInitialize={() => setTimeIsRunning(false)}
+          />
         )}
       </Card.Footer>
     </Card.Root>
