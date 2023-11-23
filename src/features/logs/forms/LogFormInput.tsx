@@ -8,6 +8,7 @@ interface LogFormInputProps {
   onChange(...event: any[]): void;
   label: string;
   component?: ComponentWithProps<any>;
+  disabled?: boolean;
 }
 
 export const LogFormInput: React.FC<LogFormInputProps> = ({
@@ -15,6 +16,7 @@ export const LogFormInput: React.FC<LogFormInputProps> = ({
   onChange,
   label,
   component: Component,
+  disabled,
 }) => {
   const Comp = Component ? Component : Input;
 
@@ -25,7 +27,7 @@ export const LogFormInput: React.FC<LogFormInputProps> = ({
         <Form.Message className='text-[0.75rem]' />
       </div>
       <Form.Control>
-        <Comp value={value} onChange={onChange} />
+        <Comp value={value} onChange={onChange} disabled={disabled} />
       </Form.Control>
     </Form.Item>
   );
