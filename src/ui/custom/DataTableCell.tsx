@@ -24,8 +24,6 @@ export const DataTableCell: React.FC<DataTableCellProps> = ({
 }) => {
   const [filterShow, setFilterShow] = useState(false);
 
-  console.log('filterValue: ', filterValue);
-
   if (isFilterable) {
     return (
       <div className='m-2 flex flex-col gap-2 items-center'>
