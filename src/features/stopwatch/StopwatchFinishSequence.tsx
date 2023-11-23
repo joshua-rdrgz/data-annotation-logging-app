@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CreateStopwatchLogForm } from '@/features/stopwatch/forms/CreateStopwatchLogForm';
 import { Dialog } from '@/ui/custom/Dialog';
 import * as D from '@/ui/dialog';
 import { Button } from '@/ui/button';
@@ -27,7 +28,7 @@ export const StopwatchFinishSequence: React.FC<
         <D.Description>
           Fill out the form to add your time to your logs.
         </D.Description>
-        {/* ADD FORM HERE */}
+        <CreateStopwatchLogForm />
       </D.Header>
     </Dialog>
   );
