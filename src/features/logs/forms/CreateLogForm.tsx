@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createLogSchema, type CreateLogSchema } from '@/schemas/logSchema';
 import { useCreateLog } from '@/features/logs/hooks/useCreateLog';
-import { LogFormInput } from '@/features/logs/form/LogFormInput';
+import { LogFormInput } from '@/features/logs/forms/LogFormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';

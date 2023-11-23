@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EditLogForm } from '@/features/logs/form/EditLogForm';
+import { EditLogForm } from '@/features/logs/forms/EditLogForm';
 import { useLog } from '@/features/logs/hooks/useLog';
 import * as D from '@/ui/dialog';
 import { DialogItem } from '@/ui/dropdown-menu';
