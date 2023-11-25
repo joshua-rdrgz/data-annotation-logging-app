@@ -37,13 +37,13 @@ export const StopwatchFinishSequence: React.FC<
         <D.Description>
           Fill out the form to add your time to your logs.
         </D.Description>
-        <CreateStopwatchLogForm
-          onFormSuccess={() => {
-            setOpen(false);
-            resetStopwatch();
-          }}
-        />
       </D.Header>
+      <CreateStopwatchLogForm
+        onFormSuccess={() => {
+          setOpen(false);
+          resetStopwatch();
+        }}
+      />
     </Dialog>
   );
 };
