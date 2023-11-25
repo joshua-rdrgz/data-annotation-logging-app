@@ -6,8 +6,10 @@ class LogAPIService {
     return await prisma.log.create({ data });
   }
 
-  async getLogs() {
-    return await prisma.log.findMany();
+  async getLogs(): Promise<Log[]> {
+    const logs = await prisma.log.findMany();
+    // convert "hourlyRate" Decimal to serializable JSON
+    return JSON.parse(JSON.stringify(logs));
   }
 
   async getLog(logId: string) {

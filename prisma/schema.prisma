@@ -14,7 +14,7 @@ model Log {
   projectName    String
   tasksCompleted Int
   minutesWorked  Int
-  hourlyRate     Int
+  hourlyRate     Decimal @db.Decimal(4, 2)
   paidOut        Boolean @default(false)
   readyToPayOut  Boolean @default(false)
 }
