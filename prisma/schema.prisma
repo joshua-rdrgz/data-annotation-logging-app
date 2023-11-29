@@ -8,13 +8,56 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  passwordHash  String
+  image         String?
+
+  accounts Account[]
+  Log      Log[]
+}
+
+enum LogStatus {
+  PENDING
+  TRANSFERRABLE
+  PAID
+}
+
 model Log {
-  id             String  @id @default(cuid())
-  date           String
-  projectName    String
-  tasksCompleted Int
-  minutesWorked  Int
-  hourlyRate     Decimal @db.Decimal(4, 2)
-  paidOut        Boolean @default(false)
-  readyToPayOut  Boolean @default(false)
+  id                 String    @id @default(cuid())
+  date               String
+  projectName        String
+  tasksCompletedHash String
+  minutesWorkedHash  String
+  hourlyRateHash     String
+  status             LogStatus
+
+  userId String
+  User   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+// NEXTAUTH.JS
+model Account {
+  id                String  @id @default(cuid())
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
