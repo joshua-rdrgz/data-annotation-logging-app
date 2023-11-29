@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createLogSchema, type CreateLogSchema } from '@/schemas/logSchema';
 import { useCreateLog } from '@/features/logs/hooks/useCreateLog';
-import { LogFormInput } from '@/features/logs/forms/LogFormInput';
+import { FormInput } from '@/ui/custom/FormInput';
 import { Form } from '@/ui/form';
 import { Input } from '@/ui/input';
 import { Button } from '@/ui/button';
@@ -69,11 +69,7 @@ export const CreateLogForm: React.FC<CreateLogFormProps> = ({
           name={input.name}
           disabled={isCreatingLog}
           render={({ field: { onChange, value } }) => (
-            <LogFormInput
-              onChange={onChange}
-              value={value}
-              label={input.label}
-            />
+            <FormInput onChange={onChange} value={value} label={input.label} />
           )}
         />
       ))}

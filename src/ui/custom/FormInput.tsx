@@ -3,19 +3,21 @@ import { Input } from '@/ui/input';
 
 type ComponentWithProps<TProps> = (props: TProps) => JSX.Element;
 
-interface LogFormInputProps {
+interface FormInputProps {
   value: any;
   onChange(...event: any[]): void;
   label: string;
   component?: ComponentWithProps<any>;
+  inputProps?: { [key: string]: any };
   disabled?: boolean;
 }
 
-export const LogFormInput: React.FC<LogFormInputProps> = ({
+export const FormInput: React.FC<FormInputProps> = ({
   value,
   onChange,
   label,
   component: Component,
+  inputProps,
   disabled,
 }) => {
   const Comp = Component ? Component : Input;
@@ -27,7 +29,12 @@ export const LogFormInput: React.FC<LogFormInputProps> = ({
         <Form.Message className='text-[0.75rem]' />
       </div>
       <Form.Control>
-        <Comp value={value} onChange={onChange} disabled={disabled} />
+        <Comp
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          {...inputProps}
+        />
       </Form.Control>
     </Form.Item>
   );

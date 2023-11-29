@@ -7,7 +7,7 @@ import { useEditLog } from '@/features/logs/hooks/useEditLog';
 import { Form } from '@/ui/form';
 import { Button } from '@/ui/button';
 import { Input } from '@/ui/input';
-import { LogFormInput } from './LogFormInput';
+import { FormInput } from '@/ui/custom/FormInput';
 
 const INPUTS = [
   {
@@ -85,7 +85,7 @@ export const EditLogForm = ({ log, onSuccess }: EditLogFormProps) => {
           name={input.name}
           disabled={isEditingLog}
           render={({ field: { onChange, value } }) => (
-            <LogFormInput
+            <FormInput
               component={input.Component}
               onChange={onChange}
               value={value}

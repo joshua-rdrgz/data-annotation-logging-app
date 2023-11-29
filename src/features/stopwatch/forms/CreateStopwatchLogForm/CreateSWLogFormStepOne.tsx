@@ -1,4 +1,4 @@
-import { LogFormInput } from '@/features/logs/forms/LogFormInput';
+import { FormInput } from '@/ui/custom/FormInput';
 import { Form } from '@/ui/form';
 
 export const STEP_ONE_INPUTS = [
@@ -36,7 +36,7 @@ export const CreateSWLogFormStepOne = ({ disabled }: { disabled: boolean }) => {
       name={input.name}
       disabled={disabled}
       render={({ field: { onChange, value } }) => (
-        <LogFormInput
+        <FormInput
           onChange={onChange}
           value={value}
           label={input.label}
