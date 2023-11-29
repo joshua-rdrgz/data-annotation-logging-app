@@ -1,6 +1,6 @@
 export default function NotFoundPage() {
   return (
-    <div className=' h-[90vh] flex flex-col gap-10 items-center justify-center text-center'>
+    <div className='h-screen flex flex-col gap-10 items-center justify-center text-center px-10'>
       <h1 className='text-6xl font-bold'>This page wasn&apos;t found 😭</h1>
       <h2 className='text-3xl font-medium'>
         Please pick one of the pages from the navigation menu to continue using
